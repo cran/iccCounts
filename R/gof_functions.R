@@ -196,7 +196,7 @@ getEnvelope <- function(model.object,nsim=100){
       sim.data$y<-sim.data[,i]
       est<-invisible(icc_counts(sim.data,y="y",id="id",met="met",type=c("con"),
                                 fam=fam))
-      resid.matrix[, i] <-sort(rqr(est))
+      sort(rqr(est))
     }
     )
 
