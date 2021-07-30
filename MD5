@@ -1,4 +1,4 @@
-ac70d09b417b26b7aa96263b645d3d6c *DESCRIPTION
+6d1e9e5e4f51118505b9a8153672ba1b *DESCRIPTION
 e854e2806df5268d21497ca6313f9412 *NAMESPACE
 bc90b4b7a3393be9d5f6ad1edc2750cd *R/auxiliar_functions.R
 ae1828a2ae33c8ed1fabb0bf6915b089 *R/core_functions.R
@@ -8,7 +8,7 @@ ae1828a2ae33c8ed1fabb0bf6915b089 *R/core_functions.R
 e14234788ee622100db4cc508c7eda18 *data/data.RData
 3e1d7d52c1df20d8267ee9ff0316fd4e *inst/doc/iccCounts_examples.R
 c64dbe9e0f082a912ae7247fb12b6b88 *inst/doc/iccCounts_examples.Rmd
-8a44068fba18dfe914e0887412ddfdd9 *inst/doc/iccCounts_examples.html
+9827f0f3e7e535f86dfa87b764a66fc8 *inst/doc/iccCounts_examples.html
 adbbb4164a12092841135cc4499a25c9 *man/AF.Rd
 7adca60d6c55d8bc59217416b6f6de41 *man/DispersionTest.Rd
 badd0386a57a69df7c97276359276206 *man/EPP.Rd
