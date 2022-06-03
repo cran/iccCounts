@@ -864,7 +864,7 @@ se_r_ZINB2_2<-function(b1,b2,b3,b4,sb,CovB,var.sb){
 #' @param id Character string indicating the name of the subjects column in the dataset.
 #' @param met Character string indicating the name of the methods column in the dataset. Only needed in the concordance setting.
 #' @param type Character string. It chooses the setting in which the ICC should be estimated. Valid values are: \code{"rep"} (default) for repeatability setting; \code{"con"} for concordance setting.
-#' @param fam Character string. The within-subjects pdf to use. Valid options are: \code{"poisson"} (default) for Poisson pdf; \code{"nbinom1"} for Negative Binomial pdf with additive extradispersion; \code{"nbinom2"} for Negative Binomial pdf with proportional extradispersion; \code{"zip"} for zero-inflated Poisson pdf; \code{"zinb1"} for zero-inflated Negative Binomial nbinom1 pdf; \code{"zinb2"} for zero-inflated Negative Binomial nbinom2 pdf;
+#' @param fam Character string. The within-subjects pdf to use. Valid options are: \code{"poisson"} (default) for Poisson pdf; \code{"nbinom1"} for Negative Binomial pdf with variance increasing linearly with the mean; \code{"nbinom2"} for Negative Binomial pdf with variance increasing quadratically with the mean; \code{"zip"} for zero-inflated Poisson pdf; \code{"zinb1"} for zero-inflated Negative Binomial nbinom1 pdf; \code{"zinb2"} for zero-inflated Negative Binomial nbinom2 pdf;
 #' @param conf Confidence level for the confidence interval estimation. Default value is set to 95%.
 #' @return An object of class *iccc*.The output is a list with the following components:
 #' \itemize{
@@ -876,13 +876,13 @@ se_r_ZINB2_2<-function(b1,b2,b3,b4,sb,CovB,var.sb){
 #'
 #' The GLMM is estimated using the *glmmTMB* package (Brooks et al. 2017). The ICC standard error is estimated by applying the delta method (Ver Hoef, 2012) using the variance-covariance matrix of parameters involved in the ICC estimate.
 #'
-#' The parameters involved in the estimation of the ICC depends in the within-subjects pdf family chosen: the between-subjects variance, the between-methods variability (in case of concordance analysis), and parameters involved in the within-subjects family chosen.
-#' In all cases the output includes the overall expectation identified as *mu*; the between-subjects variance named as *BSVar*; the between-methods variability (in case of concordance analysis) named as *BMVar*.
+#' The parameters involved in the estimation of the ICC depends on the within-subjects pdf family chosen: the between-subjects variance, the between-methods variability (in case of concordance analysis), and parameters implicated in the within-subjects family chosen.
+#' In all cases the output includes the overall expectation identified as *mu*; the between-subjects variance named as *BSVar* (log-scale); the between-methods variability (in case of concordance analysis) named as *BMVar* (log-scale).
 #'
-#' In the Negative Binomial pdf with additive extradispersion,
-#' \deqn{Var(y)=\mu*(1+r)}
-#' and Negative Binomial pdf with proportional extradispersion
-#' \deqn{Var(y)=\mu*(1+r*\mu_i^2)}
+#' In the Negative Binomial pdf with variance linearly increasing with the mean (Hardin and Hilbe, 2007),
+#' \deqn{Var(y_i)=\mu_i*(1+r)}
+#' and Negative Binomial pdf with variance quadratically increasing with the mean (Hardin and Hilbe, 2007)
+#' \deqn{Var(y_i)=\mu_i*(1+r*\mu_i)}
 #' the extra-dispersion parameter *r* is included in the output.
 #'
 #' For zero-inflated models, the probability of observing an extra zero is included in the output as *pi*.
@@ -892,6 +892,8 @@ se_r_ZINB2_2<-function(b1,b2,b3,b4,sb,CovB,var.sb){
 #' Brooks, M. E., Kristensen, K., van Benthem, K. J., Magnusson, A., Berg, C. W., Nielsen, A., Skaug, H. J., Mächler, M. and Bolker, B. M. (2017). glmmTMB balances speed and flexibility among packages for zero-inflated generalized linear mixed modeling. The R Journal, 9(2), 378–400.
 #'
 #' Carrasco, J. (2010). A Generalized Concordance Correlation Coefficient Based on the Variance Components Generalized Linear Mixed Models for Overdispersed Count Data. Biometrics, 66(3), 897-904.
+#'
+#' W. Hardin and J. Hilbe. (2007). Generalized Linear Models and Extensions. Stata Press.
 #'
 #' Ver Hoef, J.M. (2012) Who Invented the Delta Method?, The American Statistician, 66:2, 124-127,
 #' }
@@ -1008,3 +1010,96 @@ icc_counts<-function(data,y,id,met=NULL,type=c("rep","con"),
   class(out)<-"iccc"
   return(out)
 }
+
+
+
+#' Bland-Altman plot
+#'
+#' Draws the Bland-Altman plot. The differences among pair of data from the same subject
+#'  is represented on y-axis. The mean of data from the same subject is represented
+#'  on x-axis. Additionally, a bar plot with the proportions of differences
+#'  can be drawn.
+#'
+#' @export
+#' @param data A data frame containing at least two columns: outcome and subject identifier.
+#' @param y Character string indicating the name of the outcome column in the data set.
+#' @param id Character string indicating the name of the subjects column in the data set.
+#' @param rm Optional. Character string indicating the name of  column that stands for the repeated measurements from the same subjects in the dataset.
+#' Only needed to identify the differences in the Bland-Altman plot.
+#' @param type Character. Which plot has to be drawn? Default option is Bland-Altman plot ("BA" option). Alternatively, the bar plot of the proportion of the differences can be created ("bars" option).
+#' @return A list with the following components:
+#' \itemize{
+#'   \item *plot*. An object of class ggplot. The plot generated.
+#'   \item *data*. An object of class dataframe that contains the data used to generated the plot.
+#' }
+#' @examples
+#' \donttest{
+#' plot_BA(EPP,y="Social",id="id")
+#' plot_BA(EPP,y="Social",id="id",rm="Year",levels=T)
+#' plot_BA(EPP,y="Social",id="id",bars=T)
+#' }
+#
+#'
+plot_BA<-function(data,y,id,rm=NULL,type=c("BA","bars")){
+
+  type<-match.arg(type)
+  x<-get_data_plot(data,y=y,id=id,rm=rm)
+
+  if (is.null(rm)==T) {
+    aux<-x %>% group_by(id) %>% summarise(Diff = combn(y,diff,m=2),
+                                          m = mean(y))
+
+    my<-max(abs(aux$Diff))
+    mx<-max(aux$m)
+    mnx<-min(abs(aux$m))
+    rx<-mx-mnx
+
+    g1<-ggplot(data=aux,aes(x=m,y=(Diff))) + geom_point() +
+      xlim(mnx-0.05*rx,mx+0.05*rx)+
+      ylim(my*(-1),my) + geom_hline(yintercept = 0) +
+      xlab("Mean") + ylab("Difference")
+
+  }
+
+
+  if ( (is.null(rm)==F) &  (is.null(x$rm)==F)){
+
+    aux<-x %>% group_by(id) %>% summarise(Diff = combn(y,diff,m=2),
+                                          m = mean(y),
+                                          lev1=combn(rm,m=2, function(x) x[1]),
+                                          lev2=combn(rm,m=2, function(x) x[2])) %>%
+      mutate(Levels=paste(lev1,"-",lev2))
+
+    my<-max(abs(aux$Diff))
+    mx<-max(aux$m)
+    mnx<-min(abs(aux$m))
+    rx<-mx-mnx
+
+    g1<-ggplot(data=aux,aes(x=m,y=Diff,color=Levels)) + geom_point() +
+      xlim(mnx-0.05*rx,mx+0.05*rx)+
+      ylim(my*(-1),my) + geom_hline(yintercept = 0) +
+      xlab("Mean") + ylab("Difference")
+
+  }
+
+  if ( (is.null(rm)==F) &  (is.null(x$rm)==T)) stop("Incorrect name for repeated measures variable")
+
+  if ( (is.null(rm)==T) & (type=="bars") ) {
+
+    aux2<-aux %>% group_by(Diff) %>% summarise(n=n(),per=n/nrow(aux))
+    g1<-ggplot(data=aux2,aes(x=Diff,y=per)) + geom_bar(stat="identity") +
+      xlab("Difference") + ylab("Proportion")
+
+  }
+
+
+    if ( (is.null(rm)==F) & (type=="bars") ) stop("Repeated measures variable option only available for BA plot")
+
+  out<-list(plot=g1,data=aux)
+  print(g1)
+  return(invisible(out))
+}
+
+
+
+

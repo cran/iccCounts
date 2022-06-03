@@ -4,23 +4,25 @@
 \alias{GOF_check}
 \title{Goodness of fit for GLMM}
 \usage{
-GOF_check(x, nsim = 100)
+GOF_check(x, nsim = 100, alpha = 0.05)
 }
 \arguments{
 \item{x}{An object of clas \emph{iccc}.}
 
 \item{nsim}{Number of simulations to run. Default is set to 100.}
+
+\item{alpha}{Level of significance}
 }
 \value{
-An object of class \emph{GOF}. A list with the following components:
+An object of class \emph{GOF} for which method \emph{plot} is available. A list with the following components:
 \itemize{
 \item \emph{plot_env}. Plot of RQR envelopes with the original RQR.
 \item \emph{plot_var}. Plot of the simulated RQR dispersion.
 \item \emph{plot_zi}. Plot of the count of zeros in the simulated datasets.
-\item \emph{res_var}. Dispersion of RQR from the original sample. Proportion of simulated RQR dispersion that are greater than the original dispersion that can be interpreted as a simulated P-value to check the goodness of fit on dispersion.
+\item \emph{res_var}. Dispersion of RQR from the original sample.
 \item \emph{pval_var}. Proportion of simulated RQR dispersion that are greater than the original dispersion that can be interpreted as a simulated P-value to check the goodness of fit on dispersion.
 \item \emph{zero_count}. Count of zeros in the original sample.
-\item \emph{pval_zi}. Proportion of simulated zero count that are greater than that of the original dsample. It can be interpreted as a simulated P-value to check the hypothesis of zero-inflation.
+\item \emph{pval_zi}. Proportion of simulated zero count that are greater than that of the original sample. It can be interpreted as a simulated P-value to check the hypothesis of zero-inflation.
 }
 }
 \description{
@@ -28,7 +30,7 @@ Assessment of goodness of fit for GLMM
 }
 \details{
 Randomized quantile residuals are computed for the fitted model. Simulations based on the fitted model are generated
-and the model is refitted to each simulated dataset. Envelopes for RQR are built as the minimum and maximum RQR from
+and the model is refitted to each simulated dataset. Envelopes for RQR are built as the appropriate quantile (in relation to the level fo significance) of RQR from
 the refitted models. Additionally, a test for dispersion and zero inflation are carried out by comparing the RQR dispersion and the
 number of zeros from the original model and data to those from the refitted models and simulated data.
 }
@@ -41,4 +43,7 @@ GOF_check(iccpois)
 icczip<-icc_counts(EPP,y="Social",id="id",fam="zip")
 GOF_check(icczip)
 }
+}
+\seealso{
+\code{\link[=plot.GOF]{plot.GOF()}}, \code{\link[=DispersionTest]{DispersionTest()}},\code{\link[=ZeroTest]{ZeroTest()}}
 }

@@ -1,4 +1,5 @@
 
+
 Pres_ZIP<-function(y,mu,p)  (y-mu)/sqrt(mu*(1+p*mu/(1-p)))
 Pres_ZINB1<-function(y,mu,p,r)  (y-mu)/sqrt(mu*(1+r+p*mu/(1-p)))
 Pres_ZINB2<-function(y,mu,p,r) (y-mu)/sqrt(mu+(r*(mu^2)/(1-p))+((mu/(1-p))^2)*(p^2+p))
@@ -233,21 +234,23 @@ getQnorm <- function(y){
 #'
 #' @param x An object of clas *iccc*.
 #' @param nsim Number of simulations to run. Default is set to 100.
+#' @param alpha Level of significance
 #' @details Randomized quantile residuals are computed for the fitted model. Simulations based on the fitted model are generated
-#' and the model is refitted to each simulated dataset. Envelopes for RQR are built as the minimum and maximum RQR from
+#' and the model is refitted to each simulated dataset. Envelopes for RQR are built as the appropriate quantile (in relation to the level fo significance) of RQR from
 #' the refitted models. Additionally, a test for dispersion and zero inflation are carried out by comparing the RQR dispersion and the
 #' number of zeros from the original model and data to those from the refitted models and simulated data.
 #' @export
-#' @return An object of class *GOF*. A list with the following components:
+#' @return An object of class *GOF* for which method *plot* is available. A list with the following components:
 #' \itemize{
 #' \item *plot_env*. Plot of RQR envelopes with the original RQR.
 #' \item *plot_var*. Plot of the simulated RQR dispersion.
 #' \item *plot_zi*. Plot of the count of zeros in the simulated datasets.
-#' \item *res_var*. Dispersion of RQR from the original sample. Proportion of simulated RQR dispersion that are greater than the original dispersion that can be interpreted as a simulated P-value to check the goodness of fit on dispersion.
+#' \item *res_var*. Dispersion of RQR from the original sample.
 #' \item *pval_var*. Proportion of simulated RQR dispersion that are greater than the original dispersion that can be interpreted as a simulated P-value to check the goodness of fit on dispersion.
 #' \item *zero_count*. Count of zeros in the original sample.
-#' \item *pval_zi*. Proportion of simulated zero count that are greater than that of the original dsample. It can be interpreted as a simulated P-value to check the hypothesis of zero-inflation.
+#' \item *pval_zi*. Proportion of simulated zero count that are greater than that of the original sample. It can be interpreted as a simulated P-value to check the hypothesis of zero-inflation.
 #' }
+#' @seealso [plot.GOF()], [DispersionTest()],[ZeroTest()]
 #'
 #' @examples
 #' \donttest{
@@ -258,16 +261,15 @@ getQnorm <- function(y){
 #' icczip<-icc_counts(EPP,y="Social",id="id",fam="zip")
 #' GOF_check(icczip)
 #' }
-
-
-GOF_check<-function(x,nsim=100){
+GOF_check<-function(x,nsim=100,alpha=0.05){
   Freq<-NULL
   sim_out<-getEnvelope(x$model,nsim=nsim)
 
   mat<-sim_out$resid.matrix
+
   envelope.df <- data.frame(
-    min = apply(mat, 1, FUN = min),
-    max = apply(mat, 1, FUN = max),
+    min = apply(mat, 1, FUN = quantile,probs=alpha,type=6),
+    max = apply(mat, 1, FUN = quantile,probs=1-alpha,type=6),
     mean = apply(mat, 1, FUN = mean))
 
   res<-sort(rqr(x))
@@ -326,7 +328,7 @@ GOF_check<-function(x,nsim=100){
 
 
   out<-list(plot_env=g1,plot_var=g2,res_var=act_var,pval_var=pval_var,
-       plot_zi=g3,zero_count=obs_c,pval_zi=pval_zi)
+            plot_zi=g3,zero_count=obs_c,pval_zi=pval_zi)
 
   class(out)<-"GOF"
   return(out)

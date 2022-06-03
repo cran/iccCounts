@@ -9,7 +9,7 @@ A data frame with 520 rows and 3 variables:
 \describe{
 \item{Tot}{Tick counts}
 \item{TransectID}{Subject identifier}
-\item{Round}{Replicate identifier}
+\item{Round}{Identifier of repeated measurements}
 }
 }
 \usage{

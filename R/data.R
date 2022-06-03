@@ -38,7 +38,7 @@
 #' \describe{
 #'   \item{Tot}{Tick counts}
 #'   \item{TransectID}{Subject identifier}
-#'   \item{Round}{Replicate identifier}
+#'   \item{Round}{Identifier of repeated measurements}
 #' }
 #' @references {
 #' Kjellander, P.L., Aronsson, M., Bergvall, U.A. et al. (2021). Validating a common tick survey method: cloth-dragging and line transects. Exp Appl Acarol 83, 131–146.
