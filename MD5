@@ -1,14 +1,14 @@
-71b8079816839afafe7bec54218110c2 *DESCRIPTION
+61316f6d2df37b15da4ba1c8f3e545f2 *DESCRIPTION
 b7c0667676774977dcb2a1a9eba44f28 *NAMESPACE
 2eeb2a69fb8497325c6715e4dfc3d4a2 *R/auxiliar_functions.R
-2ab30d6406f6fc658ed9fb57624e8944 *R/core_functions.R
+3423de2c76e60c78e66f67c1e04c51b3 *R/core_functions.R
 9b6d5e3ec60d55f69a60af928b08ad1c *R/data.R
 6264da7059a91f2d72b6922743e98296 *R/gof_functions.R
 e8f8aff1afa8b0155f0a5e7bb2b21784 *build/vignette.rds
 e14234788ee622100db4cc508c7eda18 *data/data.RData
 3e1d7d52c1df20d8267ee9ff0316fd4e *inst/doc/iccCounts_examples.R
 c64dbe9e0f082a912ae7247fb12b6b88 *inst/doc/iccCounts_examples.Rmd
-9fb96a4d871c583fc0d371af8fc03882 *inst/doc/iccCounts_examples.html
+3770aaeb9c466486ef1e1da487af0335 *inst/doc/iccCounts_examples.html
 adbbb4164a12092841135cc4499a25c9 *man/AF.Rd
 7adca60d6c55d8bc59217416b6f6de41 *man/DispersionTest.Rd
 badd0386a57a69df7c97276359276206 *man/EPP.Rd
@@ -21,7 +21,7 @@ ef10ff2f8ba456a67a89a704e590a597 *man/ZeroTest.Rd
 31eff38f482ca1f5a3ddaf84ab84c5da *man/fit_model_rep.Rd
 e77a208f3562744ebe3fcd544236d9ab *man/icc_counts.Rd
 a9a0016ffb229d9dbc02e85dbce3bcea *man/plot.GOF.Rd
-6bfe673b7d6e3afd0d2d2dbe326bb1fb *man/plot_BA.Rd
+d0eb4c9319106a1ebedadfc7147fedf1 *man/plot_BA.Rd
 d11c75c4636d32828d8452f39db49beb *man/r_NB1.Rd
 c9818cfd1bf80d0ac6cc3a03c5accf74 *man/r_NB1_2.Rd
 547596b83c9303dc95d80c973a17d965 *man/r_NB2.Rd

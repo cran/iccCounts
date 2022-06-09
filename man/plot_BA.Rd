@@ -32,10 +32,8 @@ on x-axis. Additionally, a bar plot with the proportions of differences
 can be drawn.
 }
 \examples{
-\donttest{
 plot_BA(EPP,y="Social",id="id")
-plot_BA(EPP,y="Social",id="id",rm="Year",levels=T)
-plot_BA(EPP,y="Social",id="id",bars=T)
-}
+plot_BA(EPP,y="Social",id="id",rm="Year")
+plot_BA(EPP,y="Social",id="id",type="bars")
 
 }

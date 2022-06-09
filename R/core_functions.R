@@ -1033,11 +1033,9 @@ icc_counts<-function(data,y,id,met=NULL,type=c("rep","con"),
 #'   \item *data*. An object of class dataframe that contains the data used to generated the plot.
 #' }
 #' @examples
-#' \donttest{
 #' plot_BA(EPP,y="Social",id="id")
-#' plot_BA(EPP,y="Social",id="id",rm="Year",levels=T)
-#' plot_BA(EPP,y="Social",id="id",bars=T)
-#' }
+#' plot_BA(EPP,y="Social",id="id",rm="Year")
+#' plot_BA(EPP,y="Social",id="id",type="bars")
 #
 #'
 plot_BA<-function(data,y,id,rm=NULL,type=c("BA","bars")){

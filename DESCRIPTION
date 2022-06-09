@@ -1,6 +1,6 @@
 Package: iccCounts
 Title: Intraclass Correlation Coefficient for Count Data
-Version: 1.1.0
+Version: 1.1.1
 Author: Josep L. Carrasco <jlcarrasco@ub.edu>
 Maintainer: Josep L. Carrasco <jlcarrasco@ub.edu>
 Depends: R (>= 4.0)
@@ -13,6 +13,6 @@ License: GPL (>= 2)
 LazyData: true
 RoxygenNote: 7.2.0
 NeedsCompilation: no
-Packaged: 2022-06-03 08:21:28 UTC; hexac
+Packaged: 2022-06-07 07:14:11 UTC; hexac
 Repository: CRAN
-Date/Publication: 2022-06-03 11:40:02 UTC
+Date/Publication: 2022-06-09 11:30:18 UTC
