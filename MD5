@@ -1,14 +1,14 @@
-61316f6d2df37b15da4ba1c8f3e545f2 *DESCRIPTION
+7315d8732cb0606a1b40278ca3c59436 *DESCRIPTION
 b7c0667676774977dcb2a1a9eba44f28 *NAMESPACE
 2eeb2a69fb8497325c6715e4dfc3d4a2 *R/auxiliar_functions.R
 3423de2c76e60c78e66f67c1e04c51b3 *R/core_functions.R
 9b6d5e3ec60d55f69a60af928b08ad1c *R/data.R
 6264da7059a91f2d72b6922743e98296 *R/gof_functions.R
-e8f8aff1afa8b0155f0a5e7bb2b21784 *build/vignette.rds
+321d5c0aa1967c6d88c0b01470408e94 *build/vignette.rds
 e14234788ee622100db4cc508c7eda18 *data/data.RData
-3e1d7d52c1df20d8267ee9ff0316fd4e *inst/doc/iccCounts_examples.R
-c64dbe9e0f082a912ae7247fb12b6b88 *inst/doc/iccCounts_examples.Rmd
-3770aaeb9c466486ef1e1da487af0335 *inst/doc/iccCounts_examples.html
+bfcdd51b74a084bb029f3082e14046e0 *inst/doc/iccCounts_examples.R
+1b4f2d6a1def64be9376c82748a8bba9 *inst/doc/iccCounts_examples.Rmd
+41865567d3291d3df726b39593120d68 *inst/doc/iccCounts_examples.html
 adbbb4164a12092841135cc4499a25c9 *man/AF.Rd
 7adca60d6c55d8bc59217416b6f6de41 *man/DispersionTest.Rd
 badd0386a57a69df7c97276359276206 *man/EPP.Rd
@@ -57,5 +57,4 @@ edcb476501ea501d8befec8750744739 *man/se_r_ZINB2.Rd
 cbebb11597401e265964140d200f26f9 *man/se_r_ZINB2_2.Rd
 605e77e23cd66b59586ff2b721368ae0 *man/se_r_ZIP.Rd
 da12dedb7158c737118d54454efcd03c *man/se_r_ZIP2.Rd
-fcb130ef02c1126ad00a34ed8cc17c54 *vignettes/examples_1_0_1.R.RData
-c64dbe9e0f082a912ae7247fb12b6b88 *vignettes/iccCounts_examples.Rmd
+1b4f2d6a1def64be9376c82748a8bba9 *vignettes/iccCounts_examples.Rmd

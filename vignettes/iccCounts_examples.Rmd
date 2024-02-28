@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", fig.width=6, fig.height=4
 )
-load("examples_1_0_1.R.RData")
+
 ```
 
 # Introduction 
@@ -83,7 +83,7 @@ Nevertheless, as it was said before, the validity of the estimates is related to
 
 ```{r}
 set.seed(100)
-#AF_P.gof<-GOF_check(AF_P)
+AF_P.gof<-GOF_check(AF_P)
 ```
 
 First, let's draw the plot of RQR envelopes.
@@ -120,7 +120,7 @@ The Negative Binomial with proportional extradispersion has a slightly lower AIC
 
 ```{r}
 set.seed(100)
-#AF_NB2.gof<-GOF_check(AF_NB2)
+AF_NB2.gof<-GOF_check(AF_NB2)
 ```
 
 In the The plot of RQR envelopes, all the original RQR lie within the envelopes, so the model fits correctly the data.
@@ -164,7 +164,7 @@ When checking the GOF, if the *plot* function is applied with no value in the *t
 
 ```{r, fig.height=12, fig.width=8}
 set.seed(100)
-#G_P.gof<-GOF_check(G_P)
+G_P.gof<-GOF_check(G_P)
 plot(G_P.gof)
 ```
 
@@ -192,7 +192,7 @@ Next, let's check the GOF.
 
 ```{r}
 set.seed(100)
-#EPP_P.gof<-GOF_check(EPP_P)
+EPP_P.gof<-GOF_check(EPP_P)
 plot(EPP_P.gof,type="envelope")
 ```
 
@@ -225,7 +225,7 @@ In this case, the negative binomial with additive extradispersion fits the data 
 
 ```{r}
 set.seed(100)
-#EPP_NB1.gof<-GOF_check(EPP_NB1)
+EPP_NB1.gof<-GOF_check(EPP_NB1)
 plot(EPP_NB1.gof,type="envelope")
 
 ```
@@ -261,7 +261,7 @@ Notice the excess of zeros is about 25% (*pi* estimate in the output).
 Let's proceed by checking the GOF.
 ```{r}
 set.seed(100)
-#EPP_ZIP.gof<-GOF_check(EPP_ZIP)
+EPP_ZIP.gof<-GOF_check(EPP_ZIP)
 plot(EPP_ZIP.gof,type="envelope")
 ```
 
@@ -288,6 +288,7 @@ correlation coefficient through variance components. *Biometrics*
 Carrasco, J. (2010). A Generalized Concordance Correlation Coefficient Based on the Variance Components Generalized Linear Mixed Models for Overdispersed Count Data. *Biometrics*, 66(3), 897-904.
 
 Dunn PK, Smyth GK. (1996). Randomized quantile residuals. *J Comput Graph Stat.* 5(3):236–44.
+
 
 
 Feng et al. (2020). A comparison of residual diagnosis tools for diagnosing regression models for count data. BMC Medical Research Methodology 20:175
