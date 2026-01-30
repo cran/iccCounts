@@ -1044,7 +1044,7 @@ plot_BA<-function(data,y,id,rm=NULL,type=c("BA","bars")){
   x<-get_data_plot(data,y=y,id=id,rm=rm)
 
   if (is.null(rm)==T) {
-    aux<-x %>% group_by(id) %>% summarise(Diff = combn(y,diff,m=2),
+    aux<-x %>% group_by(id) %>% dplyr::reframe(Diff = combn(y,diff,m=2),
                                           m = mean(y))
 
     my<-max(abs(aux$Diff))
@@ -1062,7 +1062,7 @@ plot_BA<-function(data,y,id,rm=NULL,type=c("BA","bars")){
 
   if ( (is.null(rm)==F) &  (is.null(x$rm)==F)){
 
-    aux<-x %>% group_by(id) %>% summarise(Diff = combn(y,diff,m=2),
+    aux<-x %>% group_by(id) %>% dplyr::reframe(Diff = combn(y,diff,m=2),
                                           m = mean(y),
                                           lev1=combn(rm,m=2, function(x) x[1]),
                                           lev2=combn(rm,m=2, function(x) x[2])) %>%
@@ -1084,7 +1084,7 @@ plot_BA<-function(data,y,id,rm=NULL,type=c("BA","bars")){
 
   if ( (is.null(rm)==T) & (type=="bars") ) {
 
-    aux2<-aux %>% group_by(Diff) %>% summarise(n=n(),per=n/nrow(aux))
+    aux2<-aux %>% group_by(Diff) %>% dplyr::reframe(n=n(),per=n/nrow(aux))
     g1<-ggplot(data=aux2,aes(x=Diff,y=per)) + geom_bar(stat="identity") +
       xlab("Difference") + ylab("Proportion")
 

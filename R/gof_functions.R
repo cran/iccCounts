@@ -261,78 +261,99 @@ getQnorm <- function(y){
 #' icczip<-icc_counts(EPP,y="Social",id="id",fam="zip")
 #' GOF_check(icczip)
 #' }
-GOF_check<-function(x,nsim=100,alpha=0.05){
-  Freq<-NULL
-  sim_out<-getEnvelope(x$model,nsim=nsim)
+GOF_check <- function(x, nsim = 100, alpha = 0.05) {
+  Freq <- NULL
+  sim_out <- getEnvelope(x$model, nsim = nsim)
 
-  mat<-sim_out$resid.matrix
+  mat <- sim_out$resid.matrix
 
   envelope.df <- data.frame(
-    min = apply(mat, 1, FUN = quantile,probs=alpha,type=6),
-    max = apply(mat, 1, FUN = quantile,probs=1-alpha,type=6),
-    mean = apply(mat, 1, FUN = mean))
+    min = apply(mat, 1, FUN = quantile, probs = alpha, type = 6),
+    max = apply(mat, 1, FUN = quantile, probs = 1 - alpha, type = 6),
+    mean = apply(mat, 1, FUN = mean)
+  )
 
-  res<-sort(rqr(x))
-  theo<-getQnorm(res)
-  env<-as.data.frame(cbind(envelope.df,res,theo))
+  res <- sort(rqr(x))
+  theo <- getQnorm(res)
+  env <- as.data.frame(cbind(envelope.df, res, theo))
 
-  zi<-x$model$modelInfo$allForm$ziformula
-  if (zi!=~1)  plot_tit<-x$model$modelInfo$family$family
-  if (zi==~1)  plot_tit<-paste("Zero Inflated",x$model$modelInfo$family$family)
+  zi <- x$model$modelInfo$allForm$ziformula
+  if (zi != ~1) plot_tit <- x$model$modelInfo$family$family
+  if (zi == ~1) plot_tit <- paste("Zero Inflated", x$model$modelInfo$family$family)
 
-  g1<-ggplot(data=env, aes(x=theo,y=res))+geom_point(shape = "+")+
-    geom_line(aes(x=theo,y=mean),color="red",lty=2)+
-    geom_line(aes(x=theo,y=min),color="black")+
-    geom_line(aes(x=theo,y=max),color="black")+
-    theme_bw()+labs(x = "Theoretical quantiles",
-                    y = "Sample quantiles",
-                    title = paste(plot_tit,"model"))
+  g1 <- ggplot(data = env, aes(x = theo, y = res)) +
+    geom_point(shape = "+") +
+    geom_line(aes(x = theo, y = mean), color = "red", lty = 2) +
+    geom_line(aes(x = theo, y = min), color = "black") +
+    geom_line(aes(x = theo, y = max), color = "black") +
+    theme_bw() +
+    labs(x = "Theoretical quantiles",
+         y = "Sample quantiles",
+         title = paste(plot_tit, "model"))
 
   # Dispersion test
 
-  n<-nrow(x$model$frame)
-  ns<-length(unique(x$model$frame$id))
-  p<-length(x$model$fit$par)
-  rdf<-n-ns-p
-  act_var=as.numeric(var_res(x))
-  out_var_res<-data.frame(theo=apply(sim_out$resid.matrix,2,var_res_2,df=rdf))
-  pval_var<-(sum(act_var<out_var_res$theo)+1)/(nrow(out_var_res)+1)
+  n <- nrow(x$model$frame)
+  ns <- length(unique(x$model$frame$id))
+  p <- length(x$model$fit$par)
+  rdf <- n - ns - p
+  act_var <- as.numeric(var_res(x))
+  out_var_res <- data.frame(theo = apply(sim_out$resid.matrix, 2, var_res_2, df = rdf))
+  pval_var <- (sum(act_var < out_var_res$theo) + 1) / (nrow(out_var_res) + 1)
 
+  # Preparem l'etiqueta fora del ggplot
+  lab.g2 <- paste("Sample dispersion \n", round(act_var, 2))
 
-  g2<-ggplot(out_var_res,aes(x=theo, label=paste("Sample dispersion \n",round(act_var,2) ) ) ) +
-    geom_density()+
-    labs(y = "Density",x = "Simulated Residual Dispersion",
-         title = paste(plot_tit,"model"))+theme_bw()
-
-  limy<-layer_scales(g2)$y$range$range
-  limx<-layer_scales(g2)$x$range$range
-
-  g2 <- g2 + geom_label(aes(x=limx[1]+0.2*diff(limx),y=limy[1]+0.05*diff(limy)),size=3)
-
-  #ZI test
-  obs_c<-count_zero(x$model$frame$y)
-  y_sim<-sim_out$simdata %>% select(starts_with("sim"))
-  c0<-apply(y_sim,2,count_zero)
-  pval_zi<-(sum(obs_c<=c0)+1)/(length(c0)+1)
-  c0<-factor(c0,levels=min(c0):max(c0))
-  z<-prop.table(table(c0))
-
-
-  lab.g3<-paste("Zeros in sample:",obs_c )
-  g3<-ggplot(as.data.frame(z), aes(c0, Freq, label = lab.g3)) + geom_bar(stat="identity") +
-    xlab("Simulated Zero Count") + labs(y="Proportion",
-                                        title = paste(plot_tit,"model")) +
+  # MODIFICAT: Eliminat 'label' de l'aes() principal
+  g2 <- ggplot(out_var_res, aes(x = theo)) +
+    geom_density() +
+    labs(y = "Density", x = "Simulated Residual Dispersion",
+         title = paste(plot_tit, "model")) +
     theme_bw()
 
-  g3 <- g3 + geom_label(aes(x=levels(c0)[1],y=0.1),size=3,hjust=-0.5)
+  limy <- layer_scales(g2)$y$range$range
+  limx <- layer_scales(g2)$x$range$range
 
+  # MODIFICAT: Ús de annotate() en lloc de geom_label()
+  g2 <- g2 + annotate("label",
+                      x = limx[1] + 0.2 * diff(limx),
+                      y = limy[1] + 0.05 * diff(limy),
+                      label = lab.g2,
+                      size = 3)
 
-  out<-list(plot_env=g1,plot_var=g2,res_var=act_var,pval_var=pval_var,
-            plot_zi=g3,zero_count=obs_c,pval_zi=pval_zi)
+  # ZI test
+  obs_c <- count_zero(x$model$frame$y)
+  y_sim <- sim_out$simdata %>% select(starts_with("sim"))
+  c0 <- apply(y_sim, 2, count_zero)
+  pval_zi <- (sum(obs_c <= c0) + 1) / (length(c0) + 1)
+  c0 <- factor(c0, levels = min(c0):max(c0))
+  z <- prop.table(table(c0))
 
-  class(out)<-"GOF"
+  lab.g3 <- paste("Zeros in sample:", obs_c)
+
+  # MODIFICAT: Eliminat 'label' de l'aes() principal
+  g3 <- ggplot(as.data.frame(z), aes(c0, Freq)) +
+    geom_bar(stat = "identity") +
+    xlab("Simulated Zero Count") +
+    labs(y = "Proportion",
+         title = paste(plot_tit, "model")) +
+    theme_bw()
+
+  # MODIFICAT: Ús de annotate() en lloc de geom_label()
+  g3 <- g3 + annotate("label",
+                      x = levels(c0)[1],
+                      y = 0.1,
+                      label = lab.g3,
+                      size = 3,
+                      hjust = -0.5)
+
+  out <- list(plot_env = g1, plot_var = g2, res_var = act_var, pval_var = pval_var,
+              plot_zi = g3, zero_count = obs_c, pval_zi = pval_zi)
+
+  class(out) <- "GOF"
   return(out)
 }
+
 
 #' Dispersion test for GLMM
 #'
@@ -375,4 +396,25 @@ DispersionTest<-function(x){
 ZeroTest<-function(x){
   out<-data.frame(Count=x$zero_count,P_value=x$pval_zi,row.names="")
   return(out)
+}
+
+
+#' @export
+print.GOF <- function(x, ...) {
+  cat("\nResults of Goodness of Fit (GOF) Check\n")
+  cat("--------------------------------------\n")
+
+  # Mostrem la variància
+  cat(sprintf("Residual Variance: %.4f (P-value: %.4f)\n",
+              x$res_var, x$pval_var))
+
+  # Mostrem els zeros
+  cat(sprintf("Zero Count:        %d     (P-value: %.4f)\n",
+              x$zero_count, x$pval_zi))
+
+  cat("--------------------------------------\n")
+  cat("Plots available in the object: $plot_env, $plot_var, $plot_zi\n")
+
+  # Retornem l'objecte de manera invisible per no tornar-lo a imprimir
+  invisible(x)
 }

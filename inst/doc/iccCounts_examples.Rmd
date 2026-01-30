@@ -279,7 +279,7 @@ ZeroTest(EPP_ZIP.gof)
 
 # References
 
-Brooks ME, Kristensen K, van Benthem KJ, Magnusson A, Berg CW, Nielsen A, Skaug HJ, Maechler M, Bolker BM (2017). “glmmTMB Balances Speed and Flexibility Among Packages for Zero-inflated Generalized Linear Mixed Modeling.” *The R Journal*, 9(2), 378–400. https://journal.r-project.org/archive/2017/RJ-2017-066/index.html.
+Brooks ME, Kristensen K, van Benthem KJ, Magnusson A, Berg CW, Nielsen A, Skaug HJ, Maechler M, Bolker BM (2017). “glmmTMB Balances Speed and Flexibility Among Packages for Zero-inflated Generalized Linear Mixed Modeling.” *The R Journal*, 9(2), 378–400. https://journal.r-project.org/articles/RJ-2017-066/index.html.
 
 Carrasco, J. L. and Jover, L. (2003). Estimating the generalized concordance
 correlation coefficient through variance components. *Biometrics*

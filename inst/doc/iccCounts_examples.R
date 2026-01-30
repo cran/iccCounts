@@ -21,7 +21,7 @@ VarComp(AF_P)
 set.seed(100)
 AF_P.gof<-GOF_check(AF_P)
 
-## ---- fig.width=6, fig.height=4-----------------------------------------------
+## ----fig.width=6, fig.height=4------------------------------------------------
 plot(AF_P.gof,type="envelope")
 
 ## -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ G_P<-icc_counts(Grimso,y="Tot",id="TransectID")
 ICC(G_P)
 VarComp(G_P)
 
-## ---- fig.height=12, fig.width=8----------------------------------------------
+## ----fig.height=12, fig.width=8-----------------------------------------------
 set.seed(100)
 G_P.gof<-GOF_check(G_P)
 plot(G_P.gof)
